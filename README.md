@@ -21,7 +21,7 @@ Questo progetto serve a creare e configurare un infrastruttura multinodo utilizz
 - Grafana: visualizzazione dei dati di monitoraggio raccolti da Prometheus
 
 
-### Prerequisiti
+## Prerequisiti
 
 Installa Vagrant e VirtualBox tramite i loro siti ufficiali.
 
@@ -29,7 +29,7 @@ Installa Vagrant e VirtualBox tramite i loro siti ufficiali.
 ### Ansible
 
 In questo caso è stato creato un role in modo da gestire playbook multipli per la configurazione delle macchine.
-Il role è strutturato in questo modo:
+
 
 
 ### Installazione e avvio
