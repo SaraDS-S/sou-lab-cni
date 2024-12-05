@@ -1,0 +1,9 @@
+#Playbook di provisioning delle VM
+#Questo playbook installa ansible sulle macchine target e
+
+
+- hosts: localhost
+  become: yes
+  gather_facts: yes
+  roles:
+    - sou_podman

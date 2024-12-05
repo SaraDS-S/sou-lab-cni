@@ -1,0 +1,30 @@
+
+
+- name: Creo cartella config Grafana
+  command: sudo mkdir -p /etc/container_vols/grafana/config/
+
+
+- name: Creo cartella dati di Grafana
+  command: sudo mkdir -p /etc/container_vols/grafana/data/
+
+
+- name: Copio config Grafana
+  template:
+    src: grafana.ini
+    dest: /etc/container_vols/grafana/config/grafana.ini
+  become: true
+
+- name: Creo container Grafana
+  containers.podman.podman_container:
+    name: grafana
+    user: root
+    image: docker.io/grafana/grafana
+    state: started
+    expose:
+      - 3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - /etc/container_vols/grafana/config/:/etc/grafana/:z
+      - /etc/container_vols/grafana/data/:/var/lib/grafana/:z
+  become: true

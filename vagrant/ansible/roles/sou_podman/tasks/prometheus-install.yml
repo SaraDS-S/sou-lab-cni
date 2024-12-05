@@ -1,0 +1,38 @@
+
+
+- name: Creo utente Prometheus
+  ansible.builtin.user:
+    name: prometheus
+    state: present
+    create_home: no
+
+- name: Creo cartella volumi containers
+  command: sudo mkdir -p /etc/container_vols/
+    
+- name: Creo cartella config Prometheus
+  command: sudo mkdir -p /etc/container_vols/prometheus/config/
+
+- name: Creo cartella dati di Prometheus
+  command: sudo mkdir -p /etc/container_vols/prometheus/data/
+
+
+- name: Copio config Prometheus
+  template:
+    src: prometheus.yml
+    dest: /etc/container_vols/prometheus/config/prometheus.yml
+  become: true
+
+- name: Creo container Prometheus
+  containers.podman.podman_container:
+    name: prometheus
+    image: docker.io/prom/prometheus
+    user: root
+    state: started
+    expose:
+      - 9090
+    ports:
+      - "9090:9090"
+    volumes:
+      - /etc/container_vols/prometheus/data:/prometheus:z
+      - /etc/container_vols/prometheus/config/:/etc/prometheus/:z
+  become: true

@@ -1,0 +1,3 @@
+
+- name: Riavvio HaProxy
+  command: sudo podman restart haproxy

@@ -1,0 +1,27 @@
+
+- name: Installazione podman
+  include_tasks: podman.yml
+  when: ansible_hostname == "soufe1" or ansible_hostname == "soube2"
+
+- name: Generazione certificato SSL
+  include_tasks: create-ssl.yml
+  when: ansible_hostname == "soufe1"
+
+- name: Installazione e configurazione HaProxy
+  include_tasks: haproxy-install.yml
+  when: ansible_hostname == "soufe1"
+
+- name: Installazione e configurazione Prometheus
+  include_tasks: prometheus-install.yml
+  when: ansible_hostname == "soube2"
+
+- name: Installazione e configurazione Grafana
+  include_tasks: grafana-install.yml
+  when: ansible_hostname == "soube2"
+
+- name: Riavvio HaProxy post installazione
+  include_tasks: restart-haproxy.yml
+  when: ansible_hostname == "soufe1"
+
+#- name: Installazione Prometheus e Grafana
+#  include tasks: .yml

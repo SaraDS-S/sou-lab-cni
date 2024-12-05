@@ -1,0 +1,38 @@
+    
+    - name: Creazione cartella HaProxy 
+      command: sudo mkdir -p /etc/haproxy/
+
+    - name: Genero chiave privata
+      openssl_privatekey:
+        path: "/etc/haproxy/certificato.key"
+        size: 2048
+        state: present
+
+    - name: Genero un certificato self-signed
+      openssl_certificate:
+        path: "/etc/haproxy/certificato.crt"
+        privatekey_path: /etc/haproxy/certificato.key
+        provider: selfsigned
+        state: present
+    
+    - name: Verifico esistenza chiave privata
+      stat:
+        path: "/etc/haproxy/certificato.key"
+      register: key_file
+
+    - name: Verifico esistenza file crt
+      stat:
+        path: "/etc/haproxy/certificato.crt"
+      register: crt_file
+
+    - name: Fail se non esistono
+      fail:
+        msg: "I file non esistono"
+      when: not key_file.stat.exists or not crt_file.stat.exists
+
+    - name: Creo file PEM
+      assemble:
+        src: /etc/haproxy/
+        dest: /etc/haproxy/certificato.pem
+      when: key_file.stat.exists and crt_file.stat.exists
+      
